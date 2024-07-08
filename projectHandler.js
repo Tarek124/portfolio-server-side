@@ -21,4 +21,17 @@ router.post("/", async (req, res) => {
     res.status(500).json({ err, message: "there was a server-side error" });
   }
 });
+router.delete("/", async (req, res) => {
+  const { id } = req.query;
+  try {
+    const deletedDocument = await Project.deleteOne({ _id: id });
+    if (deletedDocument.deletedCount === 1) {
+      return res.status(200).json({ message: "Document deleted successfully" });
+    } else {
+      return res.status(404).json({ error: "Document not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = router;
